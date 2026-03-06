@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>React Native Senior & Lead — Interview Prep</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+<style>
+:root {
+  --bg: #0d1117; --bg2: #161b22; --bg3: #21262d;
+  --border: #30363d; --text: #c9d1d9; --text2: #8b949e;
+  --rn: #61dafb; --indigo: #818cf8; --green: #3fb950;
+  --yellow: #d29922; --red: #f85149; --purple: #bc8cff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+a { color: var(--rn); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 100; background: rgba(13,17,23,.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 1.5rem; }
+.nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; height: 56px; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-logo { font-weight: 700; font-size: 1rem; color: var(--rn); white-space: nowrap; margin-right: .5rem; }
+.nav-pill { padding: .3rem .85rem; border-radius: 20px; font-size: .8rem; white-space: nowrap; cursor: pointer; border: 1px solid transparent; color: var(--text2); transition: all .2s; background: none; }
+.nav-pill:hover, .nav-pill.active { background: var(--bg3); border-color: var(--border); color: var(--rn); }
+
+/* HERO */
+.hero { max-width: 1100px; margin: 0 auto; padding: 5rem 1.5rem 3rem; text-align: center; }
+.hero-badge { display: inline-block; padding: .3rem 1rem; border-radius: 20px; background: rgba(97,218,251,.1); border: 1px solid rgba(97,218,251,.3); color: var(--rn); font-size: .85rem; margin-bottom: 1.5rem; }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; background: linear-gradient(135deg, #fff 30%, var(--rn)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero p { font-size: 1.15rem; color: var(--text2); max-width: 600px; margin: 0 auto 2rem; }
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn { padding: .7rem 1.8rem; border-radius: 8px; font-size: .95rem; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
+.btn-primary { background: var(--rn); color: #000; }
+.btn-primary:hover { opacity: .85; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--rn); color: var(--rn); }
+
+/* PROGRESS */
+.progress-box { max-width: 700px; margin: 2.5rem auto; padding: 1.5rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; }
+.progress-header { display: flex; justify-content: space-between; margin-bottom: .75rem; font-size: .9rem; }
+.progress-bar-wrap { background: var(--bg3); border-radius: 6px; height: 8px; overflow: hidden; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--rn), var(--indigo)); border-radius: 6px; transition: width .4s ease; }
+.progress-label { color: var(--text2); font-size: .85rem; margin-top: .5rem; text-align: center; }
+
+/* MAIN */
+.main { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+
+/* SECTION */
+.section { margin-bottom: 3rem; opacity: 0; transform: translateY(20px); transition: opacity .5s, transform .5s; }
+.section.visible { opacity: 1; transform: translateY(0); }
+.section-header { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+.section-icon { font-size: 1.8rem; }
+.section-title { font-size: 1.5rem; font-weight: 700; }
+.section-desc { color: var(--text2); font-size: .9rem; margin-top: .2rem; }
+
+/* DIAGRAM */
+.diagram { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; overflow-x: auto; }
+.diagram-title { font-size: .85rem; color: var(--text2); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: .05em; }
+.arch-flow { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.arch-box { padding: .5rem 1rem; border-radius: 8px; font-size: .85rem; font-weight: 600; white-space: nowrap; }
+.arch-arrow { color: var(--text2); font-size: 1.2rem; }
+.arch-label { font-size: .75rem; color: var(--text2); margin-left: .25rem; }
+.box-js { background: rgba(97,218,251,.15); border: 1px solid rgba(97,218,251,.4); color: var(--rn); }
+.box-bridge { background: rgba(248,81,73,.12); border: 1px solid rgba(248,81,73,.35); color: var(--red); }
+.box-jsi { background: rgba(63,185,80,.12); border: 1px solid rgba(63,185,80,.35); color: var(--green); }
+.box-native { background: rgba(129,140,248,.15); border: 1px solid rgba(129,140,248,.4); color: var(--indigo); }
+.arch-row { margin-bottom: .75rem; }
+.arch-tag { display: inline-block; padding: .15rem .5rem; border-radius: 4px; font-size: .7rem; font-weight: 700; margin-right: .5rem; }
+.tag-old { background: rgba(248,81,73,.2); color: var(--red); }
+.tag-new { background: rgba(63,185,80,.2); color: var(--green); }
+
+/* ACCORDION */
+.qa-list { display: flex; flex-direction: column; gap: .75rem; }
+.qa-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color .2s; }
+.qa-item:hover { border-color: var(--text2); }
+.qa-question { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: .95rem; list-style: none; }
+.qa-question::-webkit-details-marker { display: none; }
+.qa-num { color: var(--rn); font-size: .8rem; font-weight: 700; min-width: 28px; padding-top: .1rem; }
+.qa-chevron { color: var(--text2); transition: transform .3s; font-size: .9rem; flex-shrink: 0; padding-top: .1rem; }
+details[open] .qa-chevron { transform: rotate(180deg); }
+.qa-answer { padding: 0 1.25rem 1.25rem 3rem; color: var(--text2); font-size: .9rem; line-height: 1.7; }
+.qa-answer p { margin-bottom: .75rem; }
+.qa-answer ul, .qa-answer ol { padding-left: 1.25rem; margin-bottom: .75rem; }
+.qa-answer li { margin-bottom: .3rem; }
+.qa-answer pre { margin: .75rem 0; border-radius: 8px; font-size: .8rem !important; }
+.qa-answer code:not([class]) { background: var(--bg3); padding: .1rem .35rem; border-radius: 4px; font-size: .85em; color: var(--purple); }
+.qa-links { margin-top: .75rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+.qa-link { font-size: .78rem; padding: .25rem .65rem; border-radius: 6px; background: rgba(97,218,251,.08); border: 1px solid rgba(97,218,251,.2); color: var(--rn); }
+
+/* COMPARE TABLE */
+.compare-table { width: 100%; border-collapse: collapse; font-size: .85rem; margin: 1rem 0; }
+.compare-table th { background: var(--bg3); padding: .65rem 1rem; text-align: left; border-bottom: 2px solid var(--border); color: var(--text2); font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+.compare-table td { padding: .65rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table tr:hover td { background: rgba(255,255,255,.02); }
+.check { color: var(--green); } .cross { color: var(--red); } .warn { color: var(--yellow); }
+
+/* PYRAMID */
+.pyramid { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 1rem 0; }
+.pyr-row { display: flex; align-items: center; justify-content: center; width: 100%; margin-bottom: 3px; }
+.pyr-block { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: .6rem 1rem; border-radius: 6px; color: #fff; font-size: .82rem; font-weight: 600; }
+.pyr-label { font-size: .72rem; opacity: .8; }
+
+/* CARDS (resources, tasks) */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; transition: border-color .2s, transform .2s; }
+.card:hover { border-color: var(--rn); transform: translateY(-2px); }
+.card-icon { font-size: 1.5rem; margin-bottom: .75rem; }
+.card-title { font-weight: 700; margin-bottom: .4rem; }
+.card-desc { font-size: .85rem; color: var(--text2); margin-bottom: .75rem; line-height: 1.5; }
+.card-link { font-size: .82rem; color: var(--rn); }
+
+/* TASK CARD */
+.task-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 1rem; }
+.task-header { padding: 1rem 1.25rem; display: flex; align-items: center; gap: .75rem; cursor: pointer; }
+.task-difficulty { padding: .2rem .6rem; border-radius: 4px; font-size: .72rem; font-weight: 700; }
+.diff-medium { background: rgba(210,153,34,.15); color: var(--yellow); }
+.diff-hard { background: rgba(248,81,73,.12); color: var(--red); }
+.diff-easy { background: rgba(63,185,80,.12); color: var(--green); }
+.task-body { display: none; padding: 0 1.25rem 1.25rem; }
+.task-card.open .task-body { display: block; }
+.task-toggle { margin-left: auto; font-size: .85rem; color: var(--rn); }
+
+/* CHECKLIST */
+.checklist { display: flex; flex-direction: column; gap: .5rem; }
+.check-item { display: flex; align-items: flex-start; gap: .75rem; padding: .65rem .75rem; border-radius: 8px; cursor: pointer; transition: background .15s; }
+.check-item:hover { background: var(--bg3); }
+.check-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--rn); flex-shrink: 0; margin-top: .15rem; cursor: pointer; }
+.check-text { font-size: .9rem; }
+.check-item.done .check-text { color: var(--text2); text-decoration: line-through; }
+
+/* BADGE */
+.badge { display: inline-block; padding: .15rem .55rem; border-radius: 4px; font-size: .72rem; font-weight: 700; margin-right: .35rem; }
+.badge-blue { background: rgba(97,218,251,.15); color: var(--rn); }
+.badge-purple { background: rgba(188,140,255,.15); color: var(--purple); }
+.badge-green { background: rgba(63,185,80,.12); color: var(--green); }
+
+/* INFO BOX */
+.info-box { padding: 1rem 1.25rem; border-radius: 8px; margin: .75rem 0; font-size: .88rem; }
+.info-tip { background: rgba(97,218,251,.07); border-left: 3px solid var(--rn); }
+.info-warn { background: rgba(210,153,34,.08); border-left: 3px solid var(--yellow); }
+.info-danger { background: rgba(248,81,73,.08); border-left: 3px solid var(--red); }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; color: var(--text2); font-size: .85rem; }
+
+@media(max-width:600px) {
+  .hero h1 { font-size: 1.9rem; }
+  .cards { grid-template-columns: 1fr; }
+  .arch-flow { gap: .25rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">⚛️ RN Prep</span>
+    <button class="nav-pill active" onclick="scrollTo('arch')">🏗 Архитектура</button>
+    <button class="nav-pill" onclick="scrollTo('hooks')">🪝 Hooks</button>
+    <button class="nav-pill" onclick="scrollTo('perf')">⚡ Performance</button>
+    <button class="nav-pill" onclick="scrollTo('anim')">🎨 Анимации</button>
+    <button class="nav-pill" onclick="scrollTo('state')">🗂 State</button>
+    <button class="nav-pill" onclick="scrollTo('nav')">🧭 Навигация</button>
+    <button class="nav-pill" onclick="scrollTo('ts')">🔷 TypeScript</button>
+    <button class="nav-pill" onclick="scrollTo('test')">🧪 Тесты</button>
+    <button class="nav-pill" onclick="scrollTo('sec')">🔐 Безопасность</button>
+    <button class="nav-pill" onclick="scrollTo('ci')">🚀 CI/CD</button>
+    <button class="nav-pill" onclick="scrollTo('tasks')">💡 Задачи</button>
+    <button class="nav-pill" onclick="scrollTo('checklist')">✅ Чеклист</button>
+    <button class="nav-pill" onclick="scrollTo('resources')">📚 Ресурсы</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Senior & Lead уровень · 2025</div>
+  <h1>React Native<br>Interview Prep</h1>
+  <p>Детальные объяснения, диаграммы, код и ресурсы — всё что нужно чтобы пройти собеседование уверенно</p>
+  <div class="hero-btns">
+    <button class="btn btn-primary" onclick="document.getElementById('arch').scrollIntoView({behavior:'smooth'})">Начать подготовку</button>
+    <a class="btn btn-outline" href="https://github.com/kovalenko-tech/rn-interview-prep" target="_blank">GitHub репо</a>
+  </div>
+  <div class="progress-box" style="margin-top:2.5rem">
+    <div class="progress-header">
+      <span>Прогресс подготовки</span>
+      <span id="progress-count">0 / 25 тем</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-label">Отмечай темы в чеклисте ↓</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════ ARCHITECTURE ═══════════ -->
+<section class="section" id="arch">
+  <div class="section-header">
+    <span class="section-icon">🏗</span>
+    <div><div class="section-title">Архитектура React Native</div><div class="section-desc">Самая частая тема на Senior/Lead собеседованиях</div></div>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">Эволюция архитектуры</div>
+    <div class="arch-row">
+      <span class="arch-tag tag-old">СТАРАЯ</span>
+      <div class="arch-flow">
+        <div class="arch-box box-js">JS Thread</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box box-bridge">Bridge <span class="arch-label">(JSON async)</span></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box box-native">Native Thread</div>
+      </div>
+    </div>
+    <div class="arch-row">
+      <span class="arch-tag tag-new">НОВАЯ</span>
+      <div class="arch-flow">
+        <div class="arch-box box-js">JS Thread</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box box-jsi">JSI / C++ <span class="arch-label">(sync)</span></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box box-native">Native</div>
+      </div>
+    </div>
+    <div style="margin-top:1rem;font-size:.82rem;color:var(--text2)">
+      <strong style="color:var(--text)">New Arch включает:</strong>
+      JSI &nbsp;·&nbsp; TurboModules (lazy, typed) &nbsp;·&nbsp; Fabric (новый renderer) &nbsp;·&nbsp; Codegen
+    </div>
+  </div>
+
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q1</span><span>Объясни разницу Bridge и JSI — как будто я не знаю</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <p><strong>Bridge (старая архитектура)</strong> — это очередь сообщений между JS и Native. Каждый вызов сериализуется в JSON, передаётся асинхронно, десериализуется на другой стороне. Это как REST API, только внутри приложения.</p>
+        <p><strong>JSI (JavaScript Interface)</strong> — C++ прослойка, которая даёт JS прямой доступ к нативным объектам через указатели. Никакого JSON, никакой асинхронности. JS может вызвать нативный код синхронно и получить результат сразу.</p>
+        <div class="info-box info-tip">💡 <strong>Аналогия:</strong> Bridge — звонок по телефону с переводчиком. JSI — разговор напрямую без переводчика.</div>
+        <p><strong>Почему это важно:</strong></p>
+        <ul>
+          <li>Синхронные вызовы — можно получить размер view до рендера</li>
+          <li>Нет накладных расходов сериализации — быстрее при большом количестве событий</li>
+          <li>Открывает путь к Concurrent React (Suspense, transitions)</li>
+        </ul>
+        <div class="qa-links">
+          <a class="qa-link" href="https://reactnative.dev/docs/the-new-architecture/landing-page" target="_blank">📖 New Architecture docs</a>
+          <a class="qa-link" href="https://reactnative.dev/docs/the-new-architecture/why" target="_blank">📖 Why New Architecture</a>
+        </div>
+      </div>
+    </details>
+
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q2</span><span>Что такое Hermes и зачем Meta его создала?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <p><strong>Hermes</strong> — JavaScript движок разработанный Meta специально для мобильных приложений на React Native.</p>
+        <p><strong>Проблема с обычными движками (V8, JSC):</strong> они используют JIT-компиляцию — JS парсится и компилируется при запуске приложения. На слабых Android устройствах это медленно.</p>
+        <p><strong>Решение Hermes:</strong></p>
+        <ul>
+          <li><strong>AOT компиляция</strong> — JS → bytecode происходит при сборке (не при запуске)</li>
+          <li>На устройстве уже готовый bytecode → парсинг не нужен → TTI сокращается на 30–40%</li>
+          <li>Меньше потребление RAM — GC оптимизирован под мобильные</li>
+          <li>Меньший размер бинарника чем V8</li>
+        </ul>
+        <div class="info-box info-warn">⚠️ <strong>Минус:</strong> Hermes без JIT — повторно вызываемый код не оптимизируется так хорошо как в V8. На практике для мобильных приложений это незаметно.</div>
+        <div class="qa-links">
+          <a class="qa-link" href="https://hermesengine.dev/" target="_blank">🔗 hermesengine.dev</a>
+          <a class="qa-link" href="https://reactnative.dev/docs/hermes" target="_blank">📖 Hermes в доках RN</a>
+        </div>
+      </div>
+    </details>
+
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q3</span><span>Что такое Fabric и зачем его переписали?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <p><strong>Fabric</strong> — новый рендерер React Native, замена старого UIManager.</p>
+        <p><strong>Старый рендерер:</strong> Shadow Tree жил в JS → через Bridge → Shadow Thread в C++ → UI Thread. Три копии данных, всё асинхронно.</p>
+        <p><strong>Fabric:</strong> Shadow Tree живёт в C++ и доступен синхронно из JS через JSI. Данные копируются меньше.</p>
+        <p><strong>Что это даёт:</strong></p>
+        <ul>
+          <li>Поддержка <strong>Concurrent React</strong> — Suspense, transitions, startTransition</li>
+          <li>Синхронный layout — можно измерить размер view до следующего кадра</li>
+          <li>Приоритизация обновлений (urgent vs не-urgent)</li>
+          <li>Меньше потребление памяти</li>
+        </ul>
+        <div class="qa-links">
+          <a class="qa-link" href="https://reactnative.dev/architecture/fabric-renderer" target="_blank">📖 Fabric Architecture</a>
+        </div>
+      </div>
+    </details>
+
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q4</span><span>TurboModules — что это и чем лучше старых Native Modules?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <p><strong>Старые Native Modules:</strong> все инициализируются при старте приложения, даже если не используются. Общение через Bridge (JSON).</p>
+        <p><strong>TurboModules:</strong></p>
+        <ul>
+          <li><strong>Lazy initialization</strong> — модуль загружается только при первом вызове</li>
+          <li><strong>JSI-based</strong> — прямой вызов без JSON сериализации</li>
+          <li><strong>Codegen</strong> — из TypeScript спецификации генерируется типобезопасный C++ интерфейс</li>
+          <li>Возможность синхронных вызовов</li>
+        </ul>
+        <pre><code class="language-typescript">// Спецификация TurboModule
+import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
+
+export interface Spec extends TurboModule {
+  // синхронный вызов — возможен только через JSI
+  multiply(a: number, b: number): number;
+}
+
+export default TurboModuleRegistry.getEnforcing&lt;Spec&gt;('Calculator');</code></pre>
+        <div class="qa-links">
+          <a class="qa-link" href="https://reactnative.dev/docs/the-new-architecture/pillars-turbomodules" target="_blank">📖 TurboModules docs</a>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ HOOKS ═══════════ -->
+<section class="section" id="hooks">
+  <div class="section-header">
+    <span class="section-icon">🪝</span>
+    <div><div class="section-title">JavaScript & React Hooks</div><div class="section-desc">Задают на каждом собеседовании — знать глубоко</div></div>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">Event Loop — порядок выполнения</div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;font-size:.85rem">
+      <div style="flex:1;min-width:200px">
+        <div style="margin-bottom:.5rem;color:var(--text2)">Очередь выполнения:</div>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div class="arch-box box-js" style="text-align:center">1. Call Stack</div>
+          <div style="text-align:center;color:var(--text2)">↓ пустой?</div>
+          <div class="arch-box box-jsi" style="text-align:center">2. Microtasks (Promise.then)</div>
+          <div style="text-align:center;color:var(--text2)">↓ пустые?</div>
+          <div class="arch-box box-bridge" style="text-align:center">3. Macrotasks (setTimeout)</div>
+        </div>
+      </div>
+      <div style="flex:2;min-width:260px">
+        <div style="margin-bottom:.5rem;color:var(--text2)">Пример:</div>
+        <pre style="margin:0;font-size:.78rem;border-radius:8px"><code class="language-javascript">console.log('1');          // Call Stack
+setTimeout(() => log('4'), 0); // Macrotask
+Promise.resolve()
+  .then(() => log('2'))   // Microtask
+  .then(() => log('3'));  // Microtask
+// Output: 1 → 2 → 3 → 4</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q5</span><span>useEffect — все случаи вызова и типичная ловушка с closure</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">// 1. Без deps — каждый рендер
+useEffect(() => { document.title = title; });
+
+// 2. [] — один раз при монтировании
+useEffect(() => { fetchData(); }, []);
+
+// 3. С deps — при изменении userId
+useEffect(() => { fetchUser(userId); }, [userId]);
+
+// 4. Cleanup — отписка, отмена запроса
+useEffect(() => {
+  const sub = subscribe(topic);
+  return () => sub.unsubscribe(); // вызывается перед размонтированием
+}, [topic]);</code></pre>
+        <p><strong>Closure trap — классическая ошибка:</strong></p>
+        <pre><code class="language-typescript">// ❌ count "застрял" в замыкании — всегда 0+1=1
+useEffect(() => {
+  const t = setInterval(() => setCount(count + 1), 1000);
+  return () => clearInterval(t);
+}, []); // count не в deps!
+
+// ✅ функциональное обновление — всегда актуальный prev
+useEffect(() => {
+  const t = setInterval(() => setCount(prev => prev + 1), 1000);
+  return () => clearInterval(t);
+}, []);</code></pre>
+        <div class="info-box info-tip">💡 Правило: если используешь переменную из внешнего скопа внутри useEffect — она должна быть в deps, либо используй функциональное обновление setState.</div>
+        <div class="qa-links">
+          <a class="qa-link" href="https://react.dev/learn/synchronizing-with-effects" target="_blank">📖 Synchronizing with Effects</a>
+          <a class="qa-link" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank">📖 You Might Not Need an Effect</a>
+        </div>
+      </div>
+    </details>
+
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q6</span><span>useMemo vs useCallback — разница и когда они ВРЕДЯТ</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">// useMemo — кэширует РЕЗУЛЬТАТ вычисления
+const sorted = useMemo(
+  () => items.filter(i => i.active).sort(byDate),
+  [items] // пересчёт только если items изменился
+);
+
+// useCallback — кэширует ФУНКЦИЮ
+// (эквивалентно useMemo(() => fn, deps))
+const handlePress = useCallback(
+  () => navigate('Details', { id }),
+  [id]
+);</code></pre>
+        <p><strong>Когда нужны:</strong></p>
+        <ul>
+          <li><code>useMemo</code>: тяжёлые вычисления (sort/filter 1000+ элементов)</li>
+          <li><code>useCallback</code>: передаёшь callback в компонент с <code>React.memo</code></li>
+        </ul>
+        <p><strong>Антипаттерны (когда вредят):</strong></p>
+        <pre><code class="language-typescript">// ❌ overhead > benefit для простого умножения
+const doubled = useMemo(() => count * 2, [count]);
+
+// ❌ компонент не обёрнут в React.memo — useCallback бесполезен
+&lt;Button onPress={useCallback(() => doSomething(), [])} /&gt;
+
+// ❌ объект в deps — новая ссылка каждый рендер = memo никогда не сработает
+const result = useMemo(() => heavy(obj), [{ ...obj }]);</code></pre>
+        <div class="info-box info-warn">⚠️ <strong>Правило:</strong> сначала профилируй, потом оптимизируй. Преждевременная мемоизация — враг читаемости кода.</div>
+        <div class="qa-links">
+          <a class="qa-link" href="https://react.dev/reference/react/useMemo" target="_blank">📖 useMemo</a>
+          <a class="qa-link" href="https://react.dev/reference/react/useCallback" target="_blank">📖 useCallback</a>
+        </div>
+      </div>
+    </details>
+
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q7</span><span>Как избежать лишних ре-рендеров?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">// 1. React.memo — пропускает рендер если props не изменились
+const Card = React.memo(({ title, onPress }: Props) => (
+  &lt;TouchableOpacity onPress={onPress}&gt;
+    &lt;Text&gt;{title}&lt;/Text&gt;
+  &lt;/TouchableOpacity&gt;
+));
+
+// 2. Стабильные объекты — не создавай inline
+// ❌ новый объект каждый рендер родителя
+&lt;Card style={{ padding: 10 }} /&gt;
+// ✅ вне компонента или StyleSheet
+const styles = StyleSheet.create({ card: { padding: 10 } });
+&lt;Card style={styles.card} /&gt;
+
+// 3. Разбивай контекст на мелкие
+// ❌ один контекст — все подписчики ре-рендерятся
+// ✅ отдельные контексты для разных данных
+const UserCtx = createContext(user);
+const ThemeCtx = createContext(theme);
+
+// 4. Zustand selector — подписка только на нужное поле
+const name = useStore(state => state.user.name); // только name</code></pre>
+        <div class="info-box info-tip">💡 <strong>Диагностика:</strong> React DevTools → Profiler → "Highlight updates when components render" — видишь что мигает при взаимодействии.</div>
+      </div>
+    </details>
+
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q8</span><span>Напиши хук useDebounce</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">function useDebounce&lt;T&gt;(value: T, delayMs: number): T {
+  const [debounced, setDebounced] = useState&lt;T&gt;(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebounced(value);
+    }, delayMs);
+
+    // cleanup: отменяем таймер при следующем изменении value
+    return () => clearTimeout(timer);
+  }, [value, delayMs]);
+
+  return debounced;
+}
+
+// Использование для поиска
+const [query, setQuery] = useState('');
+const debouncedQuery = useDebounce(query, 500);
+
+useEffect(() => {
+  if (debouncedQuery) searchAPI(debouncedQuery);
+}, [debouncedQuery]);</code></pre>
+      </div>
+    </details>
+
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q9</span><span>Напиши useFetch с отменой запроса (memory leak fix)</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">function useFetch&lt;T&gt;(url: string) {
+  const [data, setData] = useState&lt;T | null&gt;(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState&lt;Error | null&gt;(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    setLoading(true);
+    setError(null);
+
+    fetch(url, { signal: controller.signal })
+      .then(res =&gt; {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json() as Promise&lt;T&gt;;
+      })
+      .then(json =&gt; {
+        setData(json);
+        setLoading(false);
+      })
+      .catch(err =&gt; {
+        if (err.name !== 'AbortError') { // игнорируем отмену
+          setError(err);
+          setLoading(false);
+        }
+      });
+
+    return () =&gt; controller.abort(); // cleanup при unmount или смене url
+  }, [url]);
+
+  return { data, loading, error };
+}</code></pre>
+        <div class="info-box info-danger">🚫 <strong>Без cleanup:</strong> если компонент размонтируется пока запрос в полёте — setState вызывается на размонтированном компоненте → memory leak + предупреждение React.</div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ PERFORMANCE ═══════════ -->
+<section class="section" id="perf">
+  <div class="section-header">
+    <span class="section-icon">⚡</span>
+    <div><div class="section-title">Performance</div><div class="section-desc">FlatList, профилирование, оптимизация</div></div>
+  </div>
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q10</span><span>FlatList vs FlashList — в чём реальная разница?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <table class="compare-table">
+          <tr><th>Характеристика</th><th>FlatList</th><th>FlashList</th></tr>
+          <tr><td>Переиспользование компонентов</td><td><span class="cross">✗</span> destroy/create</td><td><span class="check">✓</span> RecycledItemPool</td></tr>
+          <tr><td>Размеры items</td><td>динамически</td><td>estimatedItemSize → быстрее</td></tr>
+          <tr><td>Нагрузка на JS Thread</td><td>высокая при скролле</td><td><span class="check">✓</span> ~10x меньше</td></tr>
+          <tr><td>Blank areas при скролле</td><td>бывают</td><td><span class="check">✓</span> редко</td></tr>
+          <tr><td>Установка</td><td>встроен в RN</td><td>npm install @shopify/flash-list</td></tr>
+        </table>
+        <pre><code class="language-typescript">// FlatList
+&lt;FlatList data={items} renderItem={({ item }) =&gt; &lt;Card item={item} /&gt;} /&gt;
+
+// FlashList — estimatedItemSize обязателен
+&lt;FlashList
+  data={items}
+  renderItem={({ item }) =&gt; &lt;Card item={item} /&gt;}
+  estimatedItemSize={80}   // средняя высота item в px
+  keyExtractor={item =&gt; item.id}
+/&gt;</code></pre>
+        <div class="info-box info-tip">💡 Правило: &lt;100 простых items → FlatList нормально. 100+ или сложные карточки → FlashList всегда.</div>
+        <div class="qa-links"><a class="qa-link" href="https://shopify.github.io/flash-list/" target="_blank">📖 FlashList docs</a></div>
+      </div>
+    </details>
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q11</span><span>Как профилировать RN приложение? Пошагово.</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <p><strong>Шаг 1 — React DevTools Profiler:</strong></p>
+        <ul>
+          <li>Записать сессию → видишь какой компонент рендерится и сколько раз</li>
+          <li>"Why did this render?" → какой prop/state вызвал ре-рендер</li>
+          <li>Длинные полосы = медленный рендер</li>
+        </ul>
+        <p><strong>Шаг 2 — Flipper (Performance plugin):</strong></p>
+        <ul>
+          <li>JS Thread FPS и UI Thread FPS — отдельно</li>
+          <li>JS FPS упал, UI норм → проблема в JS коде</li>
+          <li>Оба упали → нативная проблема или heavy layout</li>
+        </ul>
+        <p><strong>Шаг 3 — Platform-specific:</strong></p>
+        <ul>
+          <li><strong>iOS:</strong> Xcode Instruments → Time Profiler, Allocations, Leaks</li>
+          <li><strong>Android:</strong> Android Studio Profiler → CPU, Memory, Network</li>
+        </ul>
+        <div class="info-box info-tip">💡 Бюджет кадра: 16ms при 60fps, 8ms при 120fps. JS frame &gt; 16ms → пользователь видит рывок.</div>
+        <div class="info-box info-warn">⚠️ <strong>Частые находки:</strong> console.log в продакшне (−20% perf), JSON.parse(JSON.stringify()) в hot path, useSelector на большой объект целиком.</div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ ANIMATIONS ═══════════ -->
+<section class="section" id="anim">
+  <div class="section-header">
+    <span class="section-icon">🎨</span>
+    <div><div class="section-title">Анимации</div><div class="section-desc">Animated API, Reanimated 3, Gesture Handler</div></div>
+  </div>
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q12</span><span>Animated API vs Reanimated 3 — когда что использовать?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <table class="compare-table">
+          <tr><th></th><th>Animated API</th><th>Reanimated 3</th></tr>
+          <tr><td>Поток выполнения</td><td>JS Thread (с useNativeDriver → UI)</td><td>UI Thread (worklets)</td></tr>
+          <tr><td>Производительность</td><td><span class="warn">⚠️</span> зависит от JS Thread</td><td><span class="check">✓</span> не зависит</td></tr>
+          <tr><td>Свойства</td><td>transform, opacity (native)</td><td>почти все CSS свойства</td></tr>
+          <tr><td>Gesture интеграция</td><td>сложно</td><td><span class="check">✓</span> нативно</td></tr>
+          <tr><td>Сложность</td><td>простой API</td><td>чуть сложнее</td></tr>
+        </table>
+        <pre><code class="language-typescript">// Reanimated 3 — анимация в UI Thread
+import { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
+
+function PressCard() {
+  const scale = useSharedValue(1);
+
+  const animStyle = useAnimatedStyle(() =&gt; ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  return (
+    &lt;Animated.View style={animStyle}
+      onTouchStart={() =&gt; { scale.value = withSpring(0.95); }}
+      onTouchEnd={() =&gt; { scale.value = withSpring(1); }}
+    /&gt;
+  );
+}</code></pre>
+        <div class="info-box info-tip">💡 Worklets — функции помеченные 'worklet' директивой, которые компилируются и выполняются в UI Thread, независимо от JS Thread.</div>
+        <div class="qa-links">
+          <a class="qa-link" href="https://docs.swmansion.com/react-native-reanimated/" target="_blank">📖 Reanimated docs</a>
+          <a class="qa-link" href="https://docs.swmansion.com/react-native-gesture-handler/" target="_blank">📖 Gesture Handler</a>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ STATE ═══════════ -->
+<section class="section" id="state">
+  <div class="section-header">
+    <span class="section-icon">🗂</span>
+    <div><div class="section-title">State Management</div><div class="section-desc">Zustand, Redux, Context, TanStack Query</div></div>
+  </div>
+  <div class="diagram">
+    <div class="diagram-title">Когда что использовать</div>
+    <table class="compare-table">
+      <tr><th>Решение</th><th>Для чего</th><th>Плюсы</th><th>Минусы</th></tr>
+      <tr><td><span class="badge badge-blue">Context</span></td><td>Тема, локаль, user</td><td>Встроен, просто</td><td>Ре-рендер всех подписчиков</td></tr>
+      <tr><td><span class="badge badge-green">Zustand</span></td><td>Клиентский UI стейт</td><td>Минимум кода, быстрый</td><td>Меньше структуры</td></tr>
+      <tr><td><span class="badge badge-purple">Redux Toolkit</span></td><td>Большие команды</td><td>DevTools, структура</td><td>Больше boilerplate</td></tr>
+      <tr><td><span class="badge badge-blue">TanStack Query</span></td><td>Серверный стейт</td><td>Кэш, refetch, OPU</td><td>Не для UI стейта</td></tr>
+    </table>
+  </div>
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q13</span><span>Zustand — покажи правильный пример с persist</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+interface AuthStore {
+  user: User | null;
+  token: string | null;
+  login: (user: User, token: string) =&gt; void;
+  logout: () =&gt; void;
+}
+
+const useAuthStore = create&lt;AuthStore&gt;()(
+  persist(
+    (set) =&gt; ({
+      user: null,
+      token: null,
+      login: (user, token) =&gt; set({ user, token }),
+      logout: () =&gt; set({ user: null, token: null }),
+    }),
+    {
+      name: 'auth-storage',
+      storage: createJSONStorage(() =&gt; AsyncStorage),
+    }
+  )
+);
+
+// В компоненте — подписываемся только на нужное поле
+const user = useAuthStore(state =&gt; state.user);   // ре-рендер только при изменении user
+const logout = useAuthStore(state =&gt; state.logout); // стабильная ссылка</code></pre>
+        <div class="qa-links"><a class="qa-link" href="https://zustand.docs.pmnd.rs/" target="_blank">📖 Zustand docs</a></div>
+      </div>
+    </details>
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q14</span><span>Optimistic updates — как реализовать с TanStack Query?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">const addItem = useMutation({
+  mutationFn: api.addItem,
+
+  onMutate: async (newItem) =&gt; {
+    // 1. Отменяем текущие запросы
+    await queryClient.cancelQueries({ queryKey: ['items'] });
+    // 2. Сохраняем предыдущее состояние
+    const previous = queryClient.getQueryData(['items']);
+    // 3. Оптимистично обновляем UI
+    queryClient.setQueryData(['items'], old =&gt; [...old, newItem]);
+    return { previous };
+  },
+
+  onError: (_err, _item, context) =&gt; {
+    // 4. При ошибке — откат
+    queryClient.setQueryData(['items'], context?.previous);
+  },
+
+  onSettled: () =&gt; {
+    // 5. Всегда инвалидируем кэш
+    queryClient.invalidateQueries({ queryKey: ['items'] });
+  },
+});</code></pre>
+        <div class="qa-links"><a class="qa-link" href="https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates" target="_blank">📖 Optimistic Updates</a></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ NAVIGATION ═══════════ -->
+<section class="section" id="nav">
+  <div class="section-header">
+    <span class="section-icon">🧭</span>
+    <div><div class="section-title">Навигация</div><div class="section-desc">React Navigation, Auth flow, Deep Linking</div></div>
+  </div>
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q15</span><span>Правильный Auth flow — почему условный рендер, не navigate()?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">// ✅ ПРАВИЛЬНО — условный рендер стека
+function RootNavigator() {
+  const { user, isLoading } = useAuthStore();
+
+  if (isLoading) return &lt;SplashScreen /&gt;;
+
+  return (
+    &lt;Stack.Navigator screenOptions={{ headerShown: false }}&gt;
+      {user ? (
+        // Авторизованный стек
+        &lt;&gt;
+          &lt;Stack.Screen name="Home" component={HomeScreen} /&gt;
+          &lt;Stack.Screen name="Profile" component={ProfileScreen} /&gt;
+        &lt;/&gt;
+      ) : (
+        // Гостевой стек
+        &lt;&gt;
+          &lt;Stack.Screen name="Login" component={LoginScreen} /&gt;
+          &lt;Stack.Screen name="Register" component={RegisterScreen} /&gt;
+        &lt;/&gt;
+      )}
+    &lt;/Stack.Navigator&gt;
+  );
+}</code></pre>
+        <div class="info-box info-tip">💡 При logout React Navigation автоматически сбрасывает history. Пользователь не сможет нажать "back" и попасть на защищённый экран. При navigate() — history сохраняется.</div>
+        <div class="qa-links"><a class="qa-link" href="https://reactnavigation.org/docs/auth-flow" target="_blank">📖 Authentication flows</a></div>
+      </div>
+    </details>
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q16</span><span>TypeScript типизация navigation params</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">// types/navigation.ts
+export type RootStackParamList = {
+  Home: undefined;
+  UserProfile: { userId: string; username: string };
+  Settings: { section?: 'notifications' | 'privacy' };
+  ProductDetail: { id: number };
+};
+
+// В компоненте-экране
+type Props = NativeStackScreenProps&lt;RootStackParamList, 'UserProfile'&gt;;
+
+function UserProfileScreen({ route, navigation }: Props) {
+  const { userId, username } = route.params; // типизировано
+
+  return (
+    &lt;Button onPress={() =&gt; navigation.navigate('Settings', { section: 'privacy' })} /&gt;
+  );
+}
+
+// В любом месте через хук
+const navigation = useNavigation&lt;NativeStackNavigationProp&lt;RootStackParamList&gt;&gt;();</code></pre>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ TYPESCRIPT ═══════════ -->
+<section class="section" id="ts">
+  <div class="section-header">
+    <span class="section-icon">🔷</span>
+    <div><div class="section-title">TypeScript</div><div class="section-desc">Utility types, generics, conditional types</div></div>
+  </div>
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q17</span><span>Utility types — шпаргалка с примерами</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">type User = { id: string; name: string; email: string; age: number };
+
+Partial&lt;User&gt;           // все поля опциональны
+Required&lt;User&gt;          // все обязательны
+Readonly&lt;User&gt;          // нельзя изменить
+Pick&lt;User, 'id'|'name'&gt; // только id и name
+Omit&lt;User, 'age'&gt;       // всё кроме age
+Record&lt;string, User&gt;    // { [key: string]: User }
+
+// Практический пример
+type CreateUser = Omit&lt;User, 'id'&gt;;              // без id (генерируется на сервере)
+type UpdateUser = Partial&lt;Omit&lt;User, 'id'&gt;&gt;;     // все поля опциональны кроме id
+type UserPreview = Pick&lt;User, 'id' | 'name'&gt;;    // для списков
+
+// ReturnType и Parameters
+type LoginFn = (email: string, pass: string) =&gt; Promise&lt;User&gt;;
+type LoginResult = ReturnType&lt;LoginFn&gt;;    // Promise&lt;User&gt;
+type LoginParams = Parameters&lt;LoginFn&gt;;    // [string, string]</code></pre>
+      </div>
+    </details>
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q18</span><span>Conditional types и infer — объясни с примером</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">// infer — "вытащить" тип из другого типа
+type ArrayItem&lt;T&gt; = T extends (infer Item)[] ? Item : never;
+type StrItem = ArrayItem&lt;string[]&gt;; // string
+
+// Unwrap Promise
+type Awaited&lt;T&gt; = T extends Promise&lt;infer R&gt; ? R : T;
+type ApiUser = Awaited&lt;Promise&lt;User&gt;&gt;; // User
+
+// Discriminated Union — TypeScript сужает тип по полю status
+type Result&lt;T&gt; =
+  | { status: 'success'; data: T }
+  | { status: 'error'; error: string; code: number };
+
+function handle&lt;T&gt;(result: Result&lt;T&gt;) {
+  if (result.status === 'success') {
+    result.data; // T — TypeScript знает
+  } else {
+    result.error;  // string
+    result.code;   // number
+  }
+}</code></pre>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ TESTING ═══════════ -->
+<section class="section" id="test">
+  <div class="section-header">
+    <span class="section-icon">🧪</span>
+    <div><div class="section-title">Тестирование</div><div class="section-desc">Jest, Testing Library, Detox, Maestro</div></div>
+  </div>
+  <div class="diagram">
+    <div class="diagram-title">Пирамида тестирования</div>
+    <div class="pyramid">
+      <div class="pyr-row"><div class="pyr-block" style="background:rgba(248,81,73,.7);width:200px">E2E (Detox/Maestro)<div class="pyr-label">10% · критичные флоу</div></div></div>
+      <div class="pyr-row"><div class="pyr-block" style="background:rgba(210,153,34,.7);width:320px">Integration (Testing Library)<div class="pyr-label">20% · экраны с логикой</div></div></div>
+      <div class="pyr-row"><div class="pyr-block" style="background:rgba(63,185,80,.7);width:450px">Unit (Jest)<div class="pyr-label">70% · хуки, утилиты, стор</div></div></div>
+    </div>
+  </div>
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q19</span><span>Как тестировать кастомный хук?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">import { renderHook, act } from '@testing-library/react-hooks';
+import { useCounter } from './useCounter';
+
+describe('useCounter', () =&gt; {
+  it('starts with initial value', () =&gt; {
+    const { result } = renderHook(() =&gt; useCounter(5));
+    expect(result.current.count).toBe(5);
+  });
+
+  it('increments', () =&gt; {
+    const { result } = renderHook(() =&gt; useCounter(0));
+    act(() =&gt; { result.current.increment(); });
+    expect(result.current.count).toBe(1);
+  });
+
+  it('resets to initial', () =&gt; {
+    const { result } = renderHook(() =&gt; useCounter(10));
+    act(() =&gt; { result.current.increment(); result.current.reset(); });
+    expect(result.current.count).toBe(10);
+  });
+});</code></pre>
+        <div class="qa-links"><a class="qa-link" href="https://callstack.github.io/react-native-testing-library/" target="_blank">📖 Testing Library RN</a></div>
+      </div>
+    </details>
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q20</span><span>Integration тест компонента с моком API</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-typescript">import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { LoginScreen } from './LoginScreen';
+import * as api from '../api/auth';
+
+jest.mock('../api/auth');
+
+describe('LoginScreen', () =&gt; {
+  it('shows error on wrong credentials', async () =&gt; {
+    jest.spyOn(api, 'login').mockRejectedValueOnce(
+      new Error('Invalid credentials')
+    );
+
+    const { getByTestId, getByText } = render(&lt;LoginScreen /&gt;);
+
+    fireEvent.changeText(getByTestId('email-input'), 'test@test.com');
+    fireEvent.changeText(getByTestId('password-input'), 'wrong');
+    fireEvent.press(getByTestId('login-button'));
+
+    await waitFor(() =&gt; {
+      expect(getByText('Invalid credentials')).toBeTruthy();
+    });
+  });
+});</code></pre>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ SECURITY ═══════════ -->
+<section class="section" id="sec">
+  <div class="section-header">
+    <span class="section-icon">🔐</span>
+    <div><div class="section-title">Безопасность</div><div class="section-desc">Хранение данных, Keychain, Certificate Pinning</div></div>
+  </div>
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q21</span><span>Как безопасно хранить токены? AsyncStorage vs Keychain</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <table class="compare-table">
+          <tr><th>Хранилище</th><th>Шифрование</th><th>Backup</th><th>Вывод</th></tr>
+          <tr><td>AsyncStorage</td><td><span class="cross">✗</span> plain text</td><td>Android backup — виден</td><td><span class="cross">✗</span> не для секретов</td></tr>
+          <tr><td>MMKV</td><td><span class="warn">⚠️</span> опционально</td><td>зависит от настройки</td><td><span class="warn">⚠️</span> осторожно</td></tr>
+          <tr><td>react-native-keychain</td><td><span class="check">✓</span> OS-level</td><td>iOS Keychain / Android Keystore</td><td><span class="check">✓</span> правильный выбор</td></tr>
+        </table>
+        <pre><code class="language-typescript">import * as Keychain from 'react-native-keychain';
+
+// Сохранить токен
+await Keychain.setGenericPassword('token', accessToken, {
+  accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+  // Android: требует PIN/биометрию для доступа
+  securityLevel: Keychain.SECURITY_LEVEL.SECURE_HARDWARE,
+});
+
+// Получить
+const creds = await Keychain.getGenericPassword();
+const token = creds ? creds.password : null;
+
+// Удалить при logout
+await Keychain.resetGenericPassword();</code></pre>
+        <div class="qa-links"><a class="qa-link" href="https://github.com/oblador/react-native-keychain" target="_blank">📖 react-native-keychain</a></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ CI/CD ═══════════ -->
+<section class="section" id="ci">
+  <div class="section-header">
+    <span class="section-icon">🚀</span>
+    <div><div class="section-title">CI/CD и деплой</div><div class="section-desc">EAS Build, Fastlane, OTA Updates</div></div>
+  </div>
+  <div class="diagram">
+    <div class="diagram-title">Release flow</div>
+    <div class="arch-flow" style="flex-wrap:wrap;gap:.4rem">
+      <div class="arch-box box-js" style="font-size:.78rem">feature branch</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-box box-bridge" style="font-size:.78rem">PR + CI (lint/test)</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-box box-js" style="font-size:.78rem">develop</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-box box-jsi" style="font-size:.78rem">staging build</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-box box-native" style="font-size:.78rem">QA</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-box box-jsi" style="font-size:.78rem">production</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-box box-native" style="font-size:.78rem">App Store / Play Store</div>
+    </div>
+  </div>
+  <div class="qa-list">
+    <details class="qa-item">
+      <summary class="qa-question"><span class="qa-num">Q22</span><span>EAS Build и OTA Updates — как это работает?</span><span class="qa-chevron">▾</span></summary>
+      <div class="qa-answer">
+        <pre><code class="language-json">// eas.json
+{
+  "build": {
+    "development": { "developmentClient": true, "distribution": "internal" },
+    "staging": {
+      "distribution": "internal",
+      "env": { "API_URL": "https://staging.api.com" }
+    },
+    "production": { "autoIncrement": true }
+  }
+}</code></pre>
+        <p><strong>OTA Updates — только JS бандл, не нативный код:</strong></p>
+        <pre><code class="language-bash"># Обновить JS в production без пересборки
+eas update --branch production --message "Fix cart crash"
+
+# Staged rollout — сначала 10% пользователей
+eas update --branch production --rollout-percentage 10
+
+# Rollback если что-то пошло не так
+eas update:rollback --branch production</code></pre>
+        <div class="info-box info-danger">🚫 <strong>OTA нельзя:</strong> изменения в android/, ios/, новые native modules, обновление версии RN — всё это требует полной пересборки и отправки в Store.</div>
+        <div class="qa-links">
+          <a class="qa-link" href="https://docs.expo.dev/build/introduction/" target="_blank">📖 EAS Build</a>
+          <a class="qa-link" href="https://docs.expo.dev/eas-update/introduction/" target="_blank">📖 EAS Update</a>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════════ TASKS ═══════════ -->
+<section class="section" id="tasks">
+  <div class="section-header">
+    <span class="section-icon">💡</span>
+    <div><div class="section-title">Задачи на доске</div><div class="section-desc">Кликни на задачу — увидишь решение</div></div>
+  </div>
+
+  <div class="task-card" onclick="this.classList.toggle('open')">
+    <div class="task-header">
+      <span class="task-difficulty diff-easy">Easy</span>
+      <strong>useDebounce хук</strong>
+      <span class="task-toggle">Показать решение ▾</span>
+    </div>
+    <div class="task-body">
+      <pre><code class="language-typescript">function useDebounce&lt;T&gt;(value: T, delay: number): T {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() =&gt; {
+    const t = setTimeout(() =&gt; setDebounced(value), delay);
+    return () =&gt; clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="this.classList.toggle('open')">
+    <div class="task-header">
+      <span class="task-difficulty diff-medium">Medium</span>
+      <strong>useFetch с AbortController (без memory leak)</strong>
+      <span class="task-toggle">Показать решение ▾</span>
+    </div>
+    <div class="task-body">
+      <pre><code class="language-typescript">function useFetch&lt;T&gt;(url: string) {
+  const [state, setState] = useState&lt;{data:T|null;loading:boolean;error:Error|null}&gt;(
+    { data: null, loading: true, error: null }
+  );
+  useEffect(() =&gt; {
+    const ctrl = new AbortController();
+    setState(s =&gt; ({ ...s, loading: true, error: null }));
+    fetch(url, { signal: ctrl.signal })
+      .then(r =&gt; { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
+      .then(data =&gt; setState({ data, loading: false, error: null }))
+      .catch(e =&gt; { if (e.name !== 'AbortError') setState({ data: null, loading: false, error: e }); });
+    return () =&gt; ctrl.abort();
+  }, [url]);
+  return state;
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="this.classList.toggle('open')">
+    <div class="task-header">
+      <span class="task-difficulty diff-medium">Medium</span>
+      <strong>Infinite scroll хук с pagination</strong>
+      <span class="task-toggle">Показать решение ▾</span>
+    </div>
+    <div class="task-body">
+      <pre><code class="language-typescript">function useInfiniteList&lt;T&gt;(fetchFn: (page: number) =&gt; Promise&lt;T[]&gt;, pageSize = 20) {
+  const [items, setItems] = useState&lt;T[]&gt;([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadMore = useCallback(async () =&gt; {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const next = await fetchFn(page);
+      if (next.length &lt; pageSize) setHasMore(false);
+      setItems(prev =&gt; [...prev, ...next]);
+      setPage(p =&gt; p + 1);
+    } finally { setLoading(false); }
+  }, [loading, hasMore, page, fetchFn, pageSize]);
+
+  useEffect(() =&gt; { loadMore(); }, []); // первая загрузка
+  return { items, loadMore, loading, hasMore };
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="this.classList.toggle('open')">
+    <div class="task-header">
+      <span class="task-difficulty diff-hard">Hard</span>
+      <strong>Race condition при быстрой смене userId</strong>
+      <span class="task-toggle">Показать решение ▾</span>
+    </div>
+    <div class="task-body">
+      <p style="font-size:.85rem;color:var(--text2);margin-bottom:.75rem">Проблема: меняешь userId быстро → 2 запроса в полёте → второй может прийти раньше первого → показываем устаревшие данные.</p>
+      <pre><code class="language-typescript">function useUser(userId: string) {
+  const [user, setUser] = useState&lt;User | null&gt;(null);
+  useEffect(() =&gt; {
+    let isCurrent = true; // флаг актуальности запроса
+    fetchUser(userId).then(data =&gt; {
+      if (isCurrent) setUser(data); // игнорируем устаревший ответ
+    });
+    return () =&gt; { isCurrent = false; };
+  }, [userId]);
+  return user;
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="this.classList.toggle('open')">
+    <div class="task-header">
+      <span class="task-difficulty diff-medium">Medium</span>
+      <strong>useThrottle хук</strong>
+      <span class="task-toggle">Показать решение ▾</span>
+    </div>
+    <div class="task-body">
+      <pre><code class="language-typescript">function useThrottle&lt;T&gt;(value: T, limitMs: number): T {
+  const [throttled, setThrottled] = useState(value);
+  const lastRan = useRef(Date.now());
+
+  useEffect(() =&gt; {
+    const remaining = limitMs - (Date.now() - lastRan.current);
+    const t = setTimeout(() =&gt; {
+      setThrottled(value);
+      lastRan.current = Date.now();
+    }, Math.max(0, remaining));
+    return () =&gt; clearTimeout(t);
+  }, [value, limitMs]);
+
+  return throttled;
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CHECKLIST ═══════════ -->
+<section class="section" id="checklist">
+  <div class="section-header">
+    <span class="section-icon">✅</span>
+    <div><div class="section-title">Чеклист подготовки</div><div class="section-desc">Прогресс сохраняется в браузере</div></div>
+  </div>
+  <div class="checklist" id="checklist-items">
+    <label class="check-item"><input type="checkbox" data-key="c1"> <span class="check-text">Могу объяснить Bridge vs JSI без заглядывания в шпаргалку</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c2"> <span class="check-text">Знаю зачем Hermes и в чём его trade-off</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c3"> <span class="check-text">Объясню Fabric и TurboModules своими словами</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c4"> <span class="check-text">Event loop: порядок microtasks и macrotasks</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c5"> <span class="check-text">useEffect — все 4 случая и closure trap</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c6"> <span class="check-text">useMemo / useCallback — когда нужны и когда вредят</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c7"> <span class="check-text">5 способов избежать лишних ре-рендеров</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c8"> <span class="check-text">Могу написать useDebounce с нуля</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c9"> <span class="check-text">Могу написать useFetch с AbortController</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c10"> <span class="check-text">FlatList vs FlashList — разница внутри, когда что</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c11"> <span class="check-text">Знаю как профилировать (Flipper, React DevTools)</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c12"> <span class="check-text">Animated API vs Reanimated — когда что и почему</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c13"> <span class="check-text">Context / Zustand / Redux / TanStack Query — когда что</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c14"> <span class="check-text">Могу написать Zustand store с persist</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c15"> <span class="check-text">Auth flow — условный рендер, не navigate()</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c16"> <span class="check-text">TypeScript: navigation params, Utility types, infer</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c17"> <span class="check-text">Пирамида тестирования: 70/20/10 и почему именно так</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c18"> <span class="check-text">Могу написать unit тест хука и integration тест компонента</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c19"> <span class="check-text">AsyncStorage vs Keychain — почему Keychain для секретов</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c20"> <span class="check-text">Release process: feature → staging → QA → production</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c21"> <span class="check-text">OTA Updates: когда можно, когда нельзя</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c22"> <span class="check-text">Могу написать infinite scroll хук</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c23"> <span class="check-text">Race condition в useEffect — как исправить</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c24"> <span class="check-text">Готов рассказать о реальном performance problem из опыта</span></label>
+    <label class="check-item"><input type="checkbox" data-key="c25"> <span class="check-text">Готов ответить почему именно такие решения — trade-offs</span></label>
+  </div>
+</section>
+
+<!-- ═══════════ RESOURCES ═══════════ -->
+<section class="section" id="resources">
+  <div class="section-header">
+    <span class="section-icon">📚</span>
+    <div><div class="section-title">Ресурсы для углублённого изучения</div><div class="section-desc">Официальные доки и лучшие материалы по каждой теме</div></div>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="card-icon">🏗</div><div class="card-title">New Architecture</div><div class="card-desc">Официальная документация по JSI, Fabric, TurboModules и Codegen</div><a class="card-link" href="https://reactnative.dev/docs/the-new-architecture/landing-page" target="_blank">reactnative.dev/docs/the-new-architecture →</a></div>
+    <div class="card"><div class="card-icon">🎬</div><div class="card-title">Reanimated 3</div><div class="card-desc">Документация библиотеки анимаций Software Mansion с интерактивными примерами</div><a class="card-link" href="https://docs.swmansion.com/react-native-reanimated/" target="_blank">docs.swmansion.com →</a></div>
+    <div class="card"><div class="card-icon">⚡</div><div class="card-title">FlashList</div><div class="card-desc">Высокопроизводительный список от Shopify — документация и benchmarks</div><a class="card-link" href="https://shopify.github.io/flash-list/" target="_blank">shopify.github.io/flash-list →</a></div>
+    <div class="card"><div class="card-icon">🗂</div><div class="card-title">TanStack Query</div><div class="card-desc">Server state management — кэш, refetch, optimistic updates</div><a class="card-link" href="https://tanstack.com/query/latest" target="_blank">tanstack.com/query →</a></div>
+    <div class="card"><div class="card-icon">🐻</div><div class="card-title">Zustand</div><div class="card-desc">Минималистичный state manager — docs + recipes</div><a class="card-link" href="https://zustand.docs.pmnd.rs/" target="_blank">zustand.docs.pmnd.rs →</a></div>
+    <div class="card"><div class="card-icon">🧭</div><div class="card-title">React Navigation</div><div class="card-desc">Auth flow, deep linking, TypeScript типизация навигации</div><a class="card-link" href="https://reactnavigation.org/docs/getting-started" target="_blank">reactnavigation.org →</a></div>
+    <div class="card"><div class="card-icon">🧪</div><div class="card-title">Testing Library RN</div><div class="card-desc">Правильный подход к тестированию компонентов и хуков</div><a class="card-link" href="https://callstack.github.io/react-native-testing-library/" target="_blank">callstack.github.io/rntl →</a></div>
+    <div class="card"><div class="card-icon">🔐</div><div class="card-title">React Native Keychain</div><div class="card-desc">Безопасное хранение токенов — iOS Keychain + Android Keystore</div><a class="card-link" href="https://github.com/oblador/react-native-keychain" target="_blank">github.com/oblador/react-native-keychain →</a></div>
+    <div class="card"><div class="card-icon">🚀</div><div class="card-title">EAS Build & Update</div><div class="card-desc">CI/CD для React Native — сборка, деплой, OTA обновления</div><a class="card-link" href="https://docs.expo.dev/build/introduction/" target="_blank">docs.expo.dev/build →</a></div>
+    <div class="card"><div class="card-icon">🤌</div><div class="card-title">Gesture Handler</div><div class="card-desc">Нативные жесты интегрированные с Reanimated</div><a class="card-link" href="https://docs.swmansion.com/react-native-gesture-handler/" target="_blank">docs.swmansion.com/rngh →</a></div>
+    <div class="card"><div class="card-icon">📱</div><div class="card-title">Hermes Engine</div><div class="card-desc">Официальный сайт JS движка от Meta для мобильных приложений</div><a class="card-link" href="https://hermesengine.dev/" target="_blank">hermesengine.dev →</a></div>
+    <div class="card"><div class="card-icon">🎯</div><div class="card-title">RN Performance docs</div><div class="card-desc">Официальное руководство по оптимизации производительности</div><a class="card-link" href="https://reactnative.dev/docs/performance" target="_blank">reactnative.dev/docs/performance →</a></div>
+  </div>
+</section>
+
+</div><!-- /main -->
+
+<footer>
+  <p>React Native Senior & Lead — Interview Prep · <a href="https://github.com/kovalenko-tech/rn-interview-prep" target="_blank">github.com/kovalenko-tech/rn-interview-prep</a></p>
+  <p style="margin-top:.5rem;color:var(--text2)">Удачи на собеседовании 🚀</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-typescript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+<script>
+// Fade in sections
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.05 });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+// Scroll to section
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Active nav on scroll
+const sections = document.querySelectorAll('.section[id]');
+const pills = document.querySelectorAll('.nav-pill');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+  pills.forEach(p => {
+    p.classList.remove('active');
+    if (p.getAttribute('onclick')?.includes(`'${current}'`)) p.classList.add('active');
+  });
+}, { passive: true });
+
+// Checklist with localStorage
+function updateProgress() {
+  const items = document.querySelectorAll('#checklist-items input[type=checkbox]');
+  const checked = [...items].filter(i => i.checked).length;
+  const pct = Math.round((checked / items.length) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-count').textContent = `${checked} / ${items.length} тем`;
+  const labels = ['Начни с первой темы 💪', 'Хорошее начало! 🔥', 'Уже на уровне! 💡', 'Почти готов! 🎯', 'Ты готов! 🚀'];
+  document.getElementById('progress-label').textContent = labels[Math.min(4, Math.floor(pct / 25))];
+}
+
+document.querySelectorAll('#checklist-items input[type=checkbox]').forEach(cb => {
+  const key = 'rn_' + cb.dataset.key;
+  if (localStorage.getItem(key) === '1') { cb.checked = true; cb.closest('.check-item').classList.add('done'); }
+  cb.addEventListener('change', () => {
+    localStorage.setItem(key, cb.checked ? '1' : '0');
+    cb.closest('.check-item').classList.toggle('done', cb.checked);
+    updateProgress();
+  });
+});
+updateProgress();
+
+// Rerun Prism after dynamic content
+Prism.highlightAll();
+</script>
+</body>
+</html>
